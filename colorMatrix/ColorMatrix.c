@@ -13,10 +13,18 @@ struct Matrix* newMatrix = (struct Matrix*)malloc(sizeof(struct Matrix));
   if (newMatrix == NULL) {
        printf("Erro: falha na alocação de memória para a estrutura Matrix.\n");
         return NULL;
-    }
+  }
 
-    newMatrix->rows = rows;
-    newMatrix->cols = cols;
+  newMatrix->rows = rows;
+  newMatrix->cols = cols;
+
+newMatrix->matrix = (int**)malloc(rows * sizeof(int*));
+
+    if (newMatrix->matrix == NULL) {
+        printf("Erro: falha na alocação de memória para as linhas da matriz.\n");
+        free(newMatrix);
+        return NULL;
+    }
   for (int i = 0; i < rows; i++) {
   
     newMatrix->matrix[i] = (int*)malloc(cols * sizeof(int));
@@ -31,13 +39,7 @@ struct Matrix* newMatrix = (struct Matrix*)malloc(sizeof(struct Matrix));
             free(newMatrix); 
             return NULL;
         }
-    }
-     for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-        int numero_aleatorio = rand() % 2; 
-        newMatrix->matrix[i][j] = numero_aleatorio;
-        }
-    }
+  }
 
     return newMatrix;
 
@@ -49,15 +51,23 @@ int showMatrix(struct Matrix *matrix){
         
         int cel = matrix->matrix[i][j];
         printf(" %d |", cel);
-          printf("_____");
-        }
+        
+  }
+   int sizeBarra = matrix->cols*4;
+   char barra[sizeBarra]; 
+    for (int i = 0; i < sizeBarra; i++) {
+        barra[i] = '-';
     }
 
+    barra[(matrix->rows*4)] = '\0'; 
+
+    printf("\n>%s<\n", barra);
+
+}
 }
 int main(){
   int rows = 5;
   int cols = 5;
-  struct Matrix* myMatrix = CreateMatrix(rows, cols);
+  struct Matrix* myMatrix = CreateMatrix(rows, cols); 
   showMatrix(myMatrix);
-
 }
