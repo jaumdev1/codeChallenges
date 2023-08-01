@@ -128,19 +128,26 @@ void changeColor(struct Matrix *matrix, int newColor, int positionRow, int posit
     struct Cord *cord = &lista[0];
     printf("\nlistaX: %d \n", cord->x);
     if(cord->x+1 < matrix->matrix->cols){
-      if(matrix->[cord->x+1][cord->y] == colorToChange){
-
-      }
-
+    if(matrix->[cord->x+1][cord->y] == colorToChange){
+      push(&lista, &tamanho, cord->x+1, cord->y);      
+    }
     }
     if(cord->x-1 > 0){
+     if(matrix->[cord->x+1][cord->y] == colorToChange){
+      push(&lista, &tamanho, cord->x+1, cord->y);      
+    }              
 
     }
     if(cord->y+1 < matrix->matrix->rows){
+    if(matrix->[cord->x][cord->y+1] == colorToChange){
+      push(&lista, &tamanho, cord->x, cord->y+1);      
+    }              
 
     }
     if(cord->y-1 < 0){
-
+    if(matrix->[cord->x][cord->y+1] == colorToChange){
+      push(&lista, &tamanho, cord->x, cord->y-1);
+    }
     }
 
     
