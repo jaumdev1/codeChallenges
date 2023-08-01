@@ -160,7 +160,7 @@ int main(){
   int cols = 10;
   struct Matrix* myMatrix = CreateMatrix(rows, cols); 
 
-  showMatrix(myMatrix, 9);
-  changeColor(myMatrix,9, 5, 5);  
+  showMatrix(myMatrix, 7);
+  changeColor(myMatrix,7, 5, 5);  
 
 }
