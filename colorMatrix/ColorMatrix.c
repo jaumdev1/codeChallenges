@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdint.h>
+
 struct Matrix {
     int rows;
     int cols;
@@ -48,7 +49,7 @@ newMatrix->matrix = (int**)malloc(rows * sizeof(int*));
   srand(time(NULL));
   for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-        int numero_aleatorio = rand() % 3;
+        int numero_aleatorio = rand() % 2;
         newMatrix->matrix[i][j] = numero_aleatorio;
         
         
@@ -57,13 +58,16 @@ newMatrix->matrix = (int**)malloc(rows * sizeof(int*));
   return newMatrix;
 
 }
-int showMatrix(struct Matrix *matrix){
-   for (int j = 0; j < matrix->cols; j++) {
+int showMatrix(struct Matrix *matrix, int selectedNumber){
+   
+  for (int j = 0; j < matrix->cols; j++) {
    for (int i = 0; i < matrix->rows; i++) {
                 
         int cel = matrix->matrix[i][j];
-        printf(" %d |", cel);
-        
+      if(cel == selectedNumber)        
+      printf("\033[32m %d  \033[0m|", cel);
+      else
+      printf("\033[31m %d \033[0m|",cel);    
   }
    int sizeBarra = matrix->cols*4;
    char barra[sizeBarra]; 
@@ -122,35 +126,34 @@ void popFirst(struct Cord** lista, int* tamanho) {
 void changeColor(struct Matrix *matrix, int newColor, int positionRow, int positionCol){
   int colorToChange = (matrix->matrix[positionRow][positionCol]);
   struct Cord* lista = NULL;
+  
   int tamanho = 0;
   push(&lista, &tamanho, positionRow, positionCol);
   while(tamanho > 0){
     struct Cord *cord = &lista[0];
-    printf("\nlistaX: %d \n", cord->x);
-    if(cord->x+1 < matrix->matrix->cols){
-    if(matrix->[cord->x+1][cord->y] == colorToChange){
+    if(cord->x+1 < matrix->cols){
+    if(matrix->matrix[cord->x+1][cord->y] == colorToChange){
       push(&lista, &tamanho, cord->x+1, cord->y);      
     }
     }
     if(cord->x-1 > 0){
-     if(matrix->[cord->x+1][cord->y] == colorToChange){
-      push(&lista, &tamanho, cord->x+1, cord->y);      
+     if(matrix->matrix[cord->x-1][cord->y] == colorToChange){
+      push(&lista, &tamanho, cord->x-1, cord->y);      
     }              
 
     }
-    if(cord->y+1 < matrix->matrix->rows){
-    if(matrix->[cord->x][cord->y+1] == colorToChange){
+      if(cord->y+1 < matrix->rows){
+    if(matrix->matrix[cord->x][cord->y+1] == colorToChange){
       push(&lista, &tamanho, cord->x, cord->y+1);      
     }              
 
     }
-    if(cord->y-1 < 0){
-    if(matrix->[cord->x][cord->y+1] == colorToChange){
+    if(cord->y-1 > 0){
+    if(matrix->matrix[cord->x][cord->y-1] == colorToChange){
       push(&lista, &tamanho, cord->x, cord->y-1);
     }
     }
-
-    
+    matrix->matrix[cord->x][cord->y] = newColor;
     popFirst(&lista, &tamanho);
   }
 }
@@ -158,7 +161,8 @@ int main(){
   int rows = 10;
   int cols = 10;
   struct Matrix* myMatrix = CreateMatrix(rows, cols); 
-  showMatrix(myMatrix);
+  showMatrix(myMatrix, 42);
   changeColor(myMatrix,42, 5, 5);  
-  showMatrix(myMatrix);
+   printf("\n------------------------------------------\n");
+  showMatrix(myMatrix, 42);
 }
