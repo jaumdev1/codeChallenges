@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdint.h>
-
+#include <unistd.h>
 struct Matrix {
     int rows;
     int cols;
@@ -13,7 +13,9 @@ struct Cord {
   int y;
 };
 
-  
+void delay(int seconds) {
+    sleep(seconds);
+}
 struct Matrix* CreateMatrix(int rows, int cols){
 struct Matrix* newMatrix = (struct Matrix*)malloc(sizeof(struct Matrix));
   if (newMatrix == NULL) {
@@ -59,26 +61,19 @@ newMatrix->matrix = (int**)malloc(rows * sizeof(int*));
 
 }
 int showMatrix(struct Matrix *matrix, int selectedNumber){
-   
+  system("clear");
   for (int j = 0; j < matrix->cols; j++) {
    for (int i = 0; i < matrix->rows; i++) {
                 
         int cel = matrix->matrix[i][j];
       if(cel == selectedNumber)        
-      printf("\033[32m %d  \033[0m|", cel);
+      printf("\033[32m %d \033[0m|", cel);
       else
       printf("\033[31m %d \033[0m|",cel);    
   }
-   int sizeBarra = matrix->cols*4;
-   char barra[sizeBarra]; 
-    for (int i = 0; i < sizeBarra; i++) {
-        barra[i] = '-';
-    }
-
-    barra[(matrix->rows*4)] = '\0'; 
-
-    printf("\n>%s<\n", barra);
-
+   
+    
+      printf("\n \033[33m ----------------------------------------- \033[0m\n");
 }
 }
 void push(struct Cord** lista, int* tamanho, int novo_x, int novo_y) {
@@ -97,7 +92,7 @@ void push(struct Cord** lista, int* tamanho, int novo_x, int novo_y) {
 
   (*tamanho)++;
   *lista = (struct Cord*)realloc(*lista, (*tamanho) * sizeof(struct Cord));
-  if (*lista == NULL) {
+  if (*lista == NULL){
     fprintf(stderr, "Erro: Falha na alocação de memória.\n");
     exit(EXIT_FAILURE);
   }
@@ -118,7 +113,7 @@ void popFirst(struct Cord** lista, int* tamanho) {
         (*tamanho)--;
         *lista = (struct Cord*)realloc(*lista, (*tamanho) * sizeof(struct Cord));
         if (*tamanho > 0 && *lista == NULL) {
-            fprintf(stderr, "Erro: Falha na alocação de memória.\n");
+            printf("Erro: Falha na alocação de memória.\n");
             exit(EXIT_FAILURE);
         }
     }
@@ -142,7 +137,7 @@ void changeColor(struct Matrix *matrix, int newColor, int positionRow, int posit
     }              
 
     }
-      if(cord->y+1 < matrix->rows){
+   if(cord->y+1 < matrix->rows){
     if(matrix->matrix[cord->x][cord->y+1] == colorToChange){
       push(&lista, &tamanho, cord->x, cord->y+1);      
     }              
@@ -153,16 +148,19 @@ void changeColor(struct Matrix *matrix, int newColor, int positionRow, int posit
       push(&lista, &tamanho, cord->x, cord->y-1);
     }
     }
+    
     matrix->matrix[cord->x][cord->y] = newColor;
     popFirst(&lista, &tamanho);
+    delay(1);
+    showMatrix(matrix, newColor);
   }
 }
 int main(){
   int rows = 10;
   int cols = 10;
   struct Matrix* myMatrix = CreateMatrix(rows, cols); 
-  showMatrix(myMatrix, 42);
-  changeColor(myMatrix,42, 5, 5);  
-   printf("\n------------------------------------------\n");
-  showMatrix(myMatrix, 42);
+
+  showMatrix(myMatrix, 9);
+  changeColor(myMatrix,9, 5, 5);  
+
 }
