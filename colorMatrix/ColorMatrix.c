@@ -131,7 +131,7 @@ void changeColor(struct Matrix *matrix, int newColor, int positionRow, int posit
       push(&lista, &tamanho, cord->x+1, cord->y);      
     }
     }
-    if(cord->x-1 > 0){
+    if(cord->x-1 >= -1){
      if(matrix->matrix[cord->x-1][cord->y] == colorToChange){
       push(&lista, &tamanho, cord->x-1, cord->y);      
     }              
@@ -143,7 +143,7 @@ void changeColor(struct Matrix *matrix, int newColor, int positionRow, int posit
     }              
 
     }
-    if(cord->y-1 > 0){
+    if(cord->y-1 >= 0){
     if(matrix->matrix[cord->x][cord->y-1] == colorToChange){
       push(&lista, &tamanho, cord->x, cord->y-1);
     }
